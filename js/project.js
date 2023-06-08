@@ -1,10 +1,12 @@
+$('#form-show').hide()
+
 function generateMovieHTML(movie) {
     return `
         <div id="movie-${movie.id}"  class="movie">
           <h3>${movie.title}</h3>
           <p>Rating: ${movie.rating}</p>
-          <button class="edit-movie" data-id="${movie.id}">Edit</button>
-          <button id="btn-${movie.id}" class="delete-movie" data-id="${movie.id}" onclick="movDel(this.id)">Delete</button>
+          <button id="btnE-${movie.id}" class="edit-movie" data-id="${movie.id}" onclick="movEdt(this.id)">Edit</button>
+          <button id="btnD-${movie.id}" class="delete-movie" data-id="${movie.id}" onclick="movDel(this.id)">Delete</button>
         </div>
       `;
 }
@@ -21,9 +23,12 @@ function loadMovies() {
             response.forEach(function(movie) {
                 moviesHTML += generateMovieHTML(movie);
             });
-
-            $('#movies-container').html(moviesHTML);
-            $('#loading').remove();
+            setTimeout(() => {
+                $('#loading').remove();
+            }, "2000");
+            setTimeout(() => {
+                $('#movies-container').html(moviesHTML);
+            }, "2000");
         }
     });
 }
@@ -46,9 +51,10 @@ $('#add-movie-form').submit(function(event) {
     });
 });
 
-$(document).on('click', '.edit-movie', function() {
-    var movieId = $(this).data('id');
+function movEdt(id){
 
+    var movieId = id.replace('btnE-', '');
+    console.log(movieId);
     $.ajax({
         url: `${moviesURL}/${movieId}`,
         type: 'GET',
@@ -59,10 +65,11 @@ $(document).on('click', '.edit-movie', function() {
             $('#edit-movie-form input[name="rating"]').val(movie.rating);
             $('#edit-movie-form input[name="movieId"]').val(movie.id);
 
-            $('#edit-movie-form').show();
+            $('#form-show').show();
         }
     });
-});
+
+}
 
 $('#edit-movie-form').submit(function(event) {
     event.preventDefault();
@@ -79,13 +86,14 @@ $('#edit-movie-form').submit(function(event) {
             var updatedMovieHTML = generateMovieHTML(response);
             $('.movie[data-id="' + movieId + '"]').replaceWith(updatedMovieHTML);
 
-            $('#edit-movie-form').hide();
+            $('#form-show').hide();
+            loadMovies()
         }
     });
 });
 
 function movDel(id) {
-    var movieId = id.replace('btn-', '');
+    var movieId = id.replace('btnD-', '');
 
     $.ajax({
         url: `${moviesURL}/${movieId}`,
@@ -97,11 +105,8 @@ function movDel(id) {
     });
 }
 
-
-
-
-
-
 loadMovies();
 
-
+$('#myModal').on('shown.bs.modal', function () {
+    $('#myInput').trigger('focus')
+})
