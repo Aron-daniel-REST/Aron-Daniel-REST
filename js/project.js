@@ -4,7 +4,7 @@ function generateMovieHTML(movie) {
           <h3>${movie.title}</h3>
           <p>Rating: ${movie.rating}</p>
           <button class="edit-movie" data-id="${movie.id}">Edit</button>
-          <button id="btn-${movie.id}" class="delete-movie" data-id="${movie.id}">Delete</button>
+          <button id="btn-${movie.id}" class="delete-movie" data-id="${movie.id}" onclick="movDel(this.id)">Delete</button>
         </div>
       `;
 }
@@ -84,28 +84,24 @@ $('#edit-movie-form').submit(function(event) {
     });
 });
 
+function movDel(id) {
+    var movieId = id.replace('btn-', '');
 
-// $("button").on('click',  function() {
+    $.ajax({
+        url: `${moviesURL}/${movieId}`,
+        type: 'DELETE',
+        success: function() {
+            $('.movie[data-id="' + movieId + '"]').remove();
+            loadMovies()
+        }
+    });
+}
 
-// var buttonId = $(this).attr("id")
-// alert(buttonId)
 
-// var movieId = $(this).data('id');
-//
-// $.ajax({
-//     url: `${moviesURL}/${movieId}`,
-//     type: 'DELETE',
-//     success: function() {
-//         $('.movie[data-id="' + movieId + '"]').remove();
-//     }
-// });
-// });
 
-$("button").click(function() {
-    var buttonId = $(this).attr("id")
-    alert(buttonId)
-});
 
 
 
 loadMovies();
+
+
