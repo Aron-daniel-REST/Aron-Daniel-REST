@@ -1,19 +1,46 @@
-$('#form-show').hide()
-
 function generateMovieHTML(movie) {
     return `
-        <div id="movie-${movie.id}"  class="movie">
-          <h3>${movie.title}</h3>
-          <p>Rating: ${movie.rating}</p>
-          <button id="btnE-${movie.id}" class="edit-movie" data-id="${movie.id}" onclick="movEdt(this.id)">Edit</button>
-          <button id="btnD-${movie.id}" class="delete-movie" data-id="${movie.id}" onclick="movDel(this.id)">Delete</button>
-        </div>
+          <div id="movie-${movie.id}" class="carousel-item" data-bs-interval="3000">
+            <div class="card mx-auto my-5 bg-transparent" style="width: 18rem;">
+                
+                <div class="card-body border rounded border-white">
+                    <h5 class="card-title text-light">${movie.title}</h5>
+                    <p class="card-text text-light">Rating: ${movie.rating}</p>
+                    <button type="button" id="btnE-${movie.id}" class="btn btn-light text-light bg-transparent" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="movEdt(this.id)">Edit Movie</button>
+                    <button id="btnD-${movie.id}" class="btn btn-light text-light bg-transparent delete-movie" data-id="${movie.id}" onclick="movDel(this.id)">Delete Movie</button>
+                </div>
+            </div>
+          </div>
       `;
 }
 
 const moviesURL = 'https://excessive-sulfuric-narwhal.glitch.me/movies';
 
+
 function loadMovies() {
+    $.ajax({
+        url: moviesURL,
+        type: 'GET',
+        success: function(response) {
+            console.log(response)
+            var moviesHTML = '';
+
+            response.forEach(function(movie) {
+                moviesHTML += generateMovieHTML(movie);
+            });
+
+            setTimeout(() => {
+                $('#loading').remove();
+            }, "3000");
+            setTimeout(() => {
+                $('#movies-container').html(moviesHTML);
+                $('#movie-1').addClass('active');
+            }, "3000");
+        }
+    });
+}
+
+function loadMoviesFast() {
     $.ajax({
         url: moviesURL,
         type: 'GET',
@@ -23,12 +50,8 @@ function loadMovies() {
             response.forEach(function(movie) {
                 moviesHTML += generateMovieHTML(movie);
             });
-            setTimeout(() => {
-                $('#loading').remove();
-            }, "2000");
-            setTimeout(() => {
-                $('#movies-container').html(moviesHTML);
-            }, "2000");
+            $('#movies-container').html(moviesHTML);
+            $('#movie-1').addClass('active');
         }
     });
 }
@@ -65,7 +88,6 @@ function movEdt(id){
             $('#edit-movie-form input[name="rating"]').val(movie.rating);
             $('#edit-movie-form input[name="movieId"]').val(movie.id);
 
-            $('#form-show').show();
         }
     });
 
@@ -86,8 +108,8 @@ $('#edit-movie-form').submit(function(event) {
             var updatedMovieHTML = generateMovieHTML(response);
             $('.movie[data-id="' + movieId + '"]').replaceWith(updatedMovieHTML);
 
-            $('#form-show').hide();
-            loadMovies()
+            // $('#form-show').hide();
+            loadMoviesFast()
         }
     });
 });
@@ -100,13 +122,9 @@ function movDel(id) {
         type: 'DELETE',
         success: function() {
             $('.movie[data-id="' + movieId + '"]').remove();
-            loadMovies()
+            loadMoviesFast()
         }
     });
 }
 
 loadMovies();
-
-$('#myModal').on('shown.bs.modal', function () {
-    $('#myInput').trigger('focus')
-})
