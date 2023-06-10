@@ -1,9 +1,10 @@
+$('#loadingDone').hide()
 function generateMovieHTML(movie) {
 
     let htmlD = `
           <div id="movie-${movie.id}" class="carousel-item" data-bs-interval="3000">
             <div class="card mx-auto my-1 bg-light bg-opacity-10" style="width: 18rem;">
-                <div id="poster"></div>
+                <div><img class="w-100 border border-light rounded-top img-responsive poster" id="thePoster-${movie.id}" src=""></div>
                 <div class="card-body border border-top-0 rounded-bottom border-white">
                     <h5 class="card-title text-light movieTitle">${movie.title}</h5>
                     <p class="card-text text-light">Rating: ${movie.rating}</p>
@@ -33,11 +34,12 @@ function loadMovies() {
 
             setTimeout(() => {
                 $('#loading').remove();
+                $('#loadingDone').show()
             }, "3000");
             setTimeout(() => {
                 $('#movies-container').html(moviesHTML);
                 $('#movie-1').addClass('active');
-                getPoster()
+                getPoster(response)
             }, "3000");
         }
     });
@@ -111,8 +113,6 @@ $('#edit-movie-form').submit(function(event) {
         success: function(response) {
             var updatedMovieHTML = generateMovieHTML(response);
             $('.movie[data-id="' + movieId + '"]').replaceWith(updatedMovieHTML);
-
-            // $('#form-show').hide();
             loadMoviesFast()
         }
     });
@@ -132,20 +132,27 @@ function movDel(id) {
 }
 
 
-function getPoster(){
-    $('.movieTitle').each(function (){
-        let film = $(this).text()
-        console.log(film)
+function getPoster(res){
 
-        $.getJSON("https://api.themoviedb.org/3/search/movie?api_key=" + poasterKey + "&query=" + film, function(json) {
+    for (let i = 0; i < res.length; i++) {
+        let test = ''
+        $.getJSON(`https://api.themoviedb.org/3/search/movie?api_key=${poasterKey}&query=${res[i].title}`, function(json) {
+
             console.log(json)
-            if (json.results[0].original_title === film){
-                $('#poster').html(`<img class="w-100 border border-light rounded-top" id="thePoster" src="http://image.tmdb.org/t/p/w500/${json.results[0].poster_path}" class="img-responsive" >`);
+            if (json.results[0].original_title === res[i].title){
+                test = `http://image.tmdb.org/t/p/w500${json.results[0].poster_path}`
+                $('.poster').eq(i).attr('src', test)
+                console.log(test);
+
             } else {
-                $('#poster').html(`<img class="w-100 border border-light rounded-top" id="thePoster" src="img/rick.jpg"  class="img-responsive" />`);
+                test = "img/rick.jpg"
+                console.log(test)
             };
-        })
-    });
+        });
+
+
+    }
+
 }
 
 
