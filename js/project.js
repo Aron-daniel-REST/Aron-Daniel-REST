@@ -6,7 +6,7 @@ function generateMovieHTML(movie) {
             <div class="card mx-auto my-1 bg-light bg-opacity-10" style="width: 18rem;">
                 <div><img class="w-100 border border-light rounded-top img-responsive poster" id="thePoster-${movie.id}" src=""></div>
                 <div class="card-body border border-top-0 rounded-bottom border-white">
-                    <h5 class="card-title text-light movieTitle">${movie.title}</h5>
+                    <h5 class="card-title text-light movieTitle"></h5>
                     <p class="card-text text-light">Rating: ${movie.rating}</p>
                     <button type="button" id="btnE-${movie.id}" class="btn btn-light text-light bg-transparent" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="movEdt(this.id)">Edit Movie</button>
                     <button id="btnD-${movie.id}" class="btn btn-light text-light bg-transparent delete-movie" data-id="${movie.id}" onclick="movDel(this.id)">Delete Movie</button>
@@ -142,9 +142,10 @@ function getPoster(res){
         $.getJSON(`https://api.themoviedb.org/3/search/movie?api_key=${poasterKey}&query=${res[i].title}`, function(json) {
 
             console.log(json)
-            if (json.results[0].original_title === res[i].title){
+            if (json.results[0].original_title.toLowerCase() === res[i].title.toLowerCase()){
                 test = `http://image.tmdb.org/t/p/w500${json.results[0].poster_path}`
                 $('.poster').eq(i).attr('src', test)
+                $('.movieTitle').eq(i).text(json.results[0].original_title)
                 console.log(test);
 
             } else {
