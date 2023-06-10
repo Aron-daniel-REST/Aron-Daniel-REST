@@ -6,10 +6,10 @@ function generateMovieHTML(movie) {
             <div class="card mx-auto my-1 bg-light bg-opacity-10" style="width: 18rem;">
                 <div><img class="w-100 border border-light rounded-top img-responsive poster" id="thePoster-${movie.id}" src=""></div>
                 <div class="card-body border border-top-0 rounded-bottom border-white">
-                    <h5 class="card-title text-light movieTitle">${movie.title}</h5>
-                    <p class="card-text text-light">Rating: ${movie.rating}</p>
-                    <button type="button" id="btnE-${movie.id}" class="btn btn-light text-light bg-transparent" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="movEdt(this.id)">Edit Movie</button>
-                    <button id="btnD-${movie.id}" class="btn btn-light text-light bg-transparent delete-movie" data-id="${movie.id}" onclick="movDel(this.id)">Delete Movie</button>
+                    <h5 class="card-title text-light movieTitle fs-6 text-center">${movie.title}</h5>
+                    <p class="card-text text-light text-center">Rating: ${movie.rating}</p>
+                    <button type="button" id="btnE-${movie.id}" class="btn btn-light text-light bg-transparent ms-2 me-1" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="movEdt(this.id)">Edit Movie</button>
+                    <button id="btnD-${movie.id}" class="btn btn-light text-light bg-transparent delete-movie ms-2 me-1" data-id="${movie.id}" onclick="movDel(this.id)">Delete Movie</button>
                 </div>
             </div>
           </div>
