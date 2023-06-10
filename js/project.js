@@ -55,9 +55,11 @@ function loadMoviesFast() {
             response.forEach(function(movie) {
                 moviesHTML += generateMovieHTML(movie);
             });
-            $('#movies-container').html(moviesHTML);
-            $('#movie-1').addClass('active');
-            getPoster()
+            setTimeout(() => {
+                $('#movies-container').html(moviesHTML);
+                $('#movie-1').addClass('active');
+                getPoster(response)
+            }, "1000");
         }
     });
 }
@@ -76,6 +78,7 @@ $('#add-movie-form').submit(function(event) {
             var movieHTML = generateMovieHTML(response);
             $('#movies-container').append(movieHTML);
             $('#add-movie-form')[0].reset();
+            loadMoviesFast()
         }
     });
 });
@@ -146,6 +149,7 @@ function getPoster(res){
 
             } else {
                 test = "img/rick.jpg"
+                $('.poster').eq(i).attr('src', test)
                 console.log(test)
             };
         });
