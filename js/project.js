@@ -135,33 +135,31 @@ function movDel(id) {
 }
 
 
-function getPoster(res){
-
+function getPoster(res) {
     for (let i = 0; i < res.length; i++) {
-        let test = ''
+        let test = '';
         $.getJSON(`https://api.themoviedb.org/3/search/movie?api_key=${poasterKey}&query=${res[i].title}`, function(json) {
-
-            console.log(json)
-            if (json.results[0].original_title.toLowerCase() === res[i].title.toLowerCase()){
-                test = `http://image.tmdb.org/t/p/w500${json.results[0].poster_path}`
-                $('.poster').eq(i).attr('src', test)
-                if(json.results[0].original_title === ''){
-                    $('.movieTitle').eq(i).text(res[0].title)
+            console.log(json);
+            if (json.results.length > 0 && json.results[0].original_title.toLowerCase() === res[i].title.toLowerCase()) {
+                test = `http://image.tmdb.org/t/p/w500${json.results[0].poster_path}`;
+                $('.poster').eq(i).attr('src', test);
+                if (json.results[0].original_title === '') {
+                    $('.movieTitle').eq(i).text(res[i].title);
                 } else {
-                    $('.movieTitle').eq(i).text(json.results[0].original_title)
+                    $('.movieTitle').eq(i).text(json.results[0].original_title);
                 }
                 console.log(test);
-
             } else {
-                test = "img/rick.jpg"
-                $('.poster').eq(i).attr('src', test)
-                console.log(test)
-            };
+                test = "img/rick.jpg";
+                $('.poster').eq(i).attr('src', test);
+                console.log(test);
+            }
+        }).fail(function() {
+            test = "img/rick.jpg";
+            $('.poster').eq(i).attr('src', test);
+            console.log(test);
         });
-
-
     }
-
 }
 
 
