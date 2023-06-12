@@ -24,22 +24,22 @@
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content bg-dark bg-gradient bg-opacity-75 text-light">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Movie</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5 text-center" id="exampleModalLabel">Edit Movie</h1>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body d-flex justify-content-center">
         <form id="edit-movie-form">
           <label for="edit-title">Title:</label>
           <input type="text" id="edit-title" name="title" required>
 
-          <label for="edit-rating">Rating:</label>
-          <input type="number" id="edit-rating" name="rating" min="1" max="5" required>
+          <label class="ms-2" for="edit-rating">Rating:</label>
+          <input class="me-2" type="number" id="edit-rating" name="rating" min="1" max="5" required>
 
           <input type="hidden" id="movieId" name="movieId">
 
-          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Edit Movie</button>
+          <button type="submit" class="btn btn-light bg-transparent text-light btn-sm mb-1" data-bs-dismiss="modal">Edit Movie</button>
         </form>
       </div>
     </div>
